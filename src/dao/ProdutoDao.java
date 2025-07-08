@@ -64,7 +64,7 @@ public class ProdutoDao {
 	    }
 	}
 	
-	public void AtualizarPrecoProduto(double preco, int id) {
+	public void atualizarPrecoProduto(double preco, int id) {
 		try {
 			conn = DB.getConnection();
 			

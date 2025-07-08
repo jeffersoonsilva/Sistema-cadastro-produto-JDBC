@@ -26,7 +26,15 @@ public class TesteProduto {
 		
 		do {
 		
-			produtoController.menuOpcao();
+			System.out.println("========================================");			
+			System.out.println("                   Menu                 ");
+			System.out.println("========================================");
+			System.out.println("Digite 0 para sair do programa");
+			System.out.println("Digite 1 para inserir os produtos");
+			System.out.println("Digite 2 para listar os produtos");
+			System.out.println("Digite 3 para alterar o preço do produto");
+			System.out.println("Digite 4 para deletar o produto ");
+			System.out.println("========================================");
 			resp = entrada.nextInt();
 			
 			switch(resp) {
@@ -54,7 +62,9 @@ public class TesteProduto {
 					}while(respP == 's');
 				break;
 				case 2:
-					produtoController.listarProdutos();
+					System.out.println("========================================");		
+					System.out.println("            Lista dos Produtos          ");
+					System.out.println("========================================");	
 					produtoController.listarProduto();
 				break;
 				case 3:
@@ -62,7 +72,7 @@ public class TesteProduto {
 					int codigoProdutoAlterar = entrada.nextInt();
 					System.out.println("Digite o novo valor");
 					double novoPreco = entrada.nextDouble();
-					produtoController.AtualizarPrecoProduto(novoPreco, codigoProdutoAlterar);
+					produtoController.atualizarPrecoProduto(novoPreco, codigoProdutoAlterar);
 				break;
 				case 4:
 					System.out.print("Digite o codigo  do produto que você deseja excluir: ");
