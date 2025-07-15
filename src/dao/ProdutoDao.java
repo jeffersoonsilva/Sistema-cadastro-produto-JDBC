@@ -11,22 +11,16 @@ import model.Produto;
 
 public class ProdutoDao {
 	
-	Connection conn = null;
-	PreparedStatement pst = null;
-	Statement st = null;
-	ResultSet rs = null;
-	
-	
 	public void inserirProduto(Produto produto) {
 	
-		try {
-			conn = DB.getConnection();
-			
-			pst = conn.prepareStatement(
-					"INSERT INTO produto "
-					+ "(nome, quantidade, preco) "
-					+ "VALUES "
-					+ "(?, ?, ?) ");
+		String sql = "INSERT INTO produto "
+				+ "(nome, quantidade, preco) "
+				+ "VALUES "
+				+ "(?, ?, ?) ";
+		
+		try (Connection conn = DB.getConnection();
+			 PreparedStatement pst = conn.prepareStatement(sql)) {
+					
 			pst.setString(1, produto.getNome());
 			pst.setInt(2, produto.getQuantidade());
 			pst.setDouble(3, produto.getPreco());
@@ -36,20 +30,17 @@ public class ProdutoDao {
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
-		}finally {
-	        DB.closeStatement(pst);
-	        DB.closeConnection();
-	    }
+		}
 	}
 	
 	public void excluirProduto(int id) {
-		try {
-			conn = DB.getConnection();
-			
-			pst = conn.prepareStatement(
-					"DELETE FROM produto "
-					+ "WHERE "
-					+ "id = ? ");
+		
+		String sql = "DELETE FROM produto "
+				+ "WHERE "
+				+ "id = ? ";
+				
+		try (Connection conn = DB.getConnection();
+			 PreparedStatement pst = conn.prepareStatement(sql)) {
 			
 			pst.setInt(1, id);
 			
@@ -58,21 +49,18 @@ public class ProdutoDao {
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
-		}finally {
-	        DB.closeStatement(pst);
-	        DB.closeConnection();
-	    }
+		}
 	}
 	
 	public void atualizarPrecoProduto(double preco, int id) {
-		try {
-			conn = DB.getConnection();
-			
-			pst = conn.prepareStatement(
-					"UPDATE produto "
-					+ "SET preco = ?"
-					+ "WHERE "
-					+ "id = ? ");
+		
+		String sql = "UPDATE produto "
+				+ "SET preco = ?"
+				+ "WHERE "
+				+ "id = ? ";
+		
+		try (Connection conn = DB.getConnection();
+			 PreparedStatement pst = conn.prepareStatement(sql)) {
 			
 			pst.setDouble(1, preco);
 			pst.setInt(2, id);
@@ -82,37 +70,25 @@ public class ProdutoDao {
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
-		}finally {
-	        DB.closeStatement(pst);
-	        DB.closeConnection();
-	    }
+		}
 	}
 	
 	public void listarProdutos() {
-		try {
-			conn = DB.getConnection();
-			
-			st = conn.createStatement();
-			
-			rs = st.executeQuery("SELECT * FROM produto");
-			
-			while (rs.next()) {
-				System.out.println(rs.getInt("id") 
-						+ ", " 
-						+ rs.getString("nome") 
-						+ ", " 
-						+ rs.getInt("quantidade") 
-						+ ", " 
-						+ rs.getDouble("preco"));
-			}
-		
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}finally {
-			 DB.closeResultSet(rs);
-		     DB.closeStatement(st);
-		     DB.closeConnection();
+		String sql = "SELECT * FROM produto";
+
+	    try (Connection conn = DB.getConnection();
+	         PreparedStatement pst = conn.prepareStatement(sql);
+	         ResultSet rs = pst.executeQuery()) {
+
+	        while (rs.next()) {
+	            System.out.println(rs.getInt("id")
+	                    + ", " + rs.getString("nome")
+	                    + ", " + rs.getInt("quantidade")
+	                    + ", " + rs.getDouble("preco"));
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
 	    }
 	}
 }
